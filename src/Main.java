@@ -6,7 +6,7 @@ import tasks.SubTask;
 import tasks.Task;
 
 class Main {
-
+    g
     public static void main(String[] args) {
         TaskManager manager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
 
