@@ -132,5 +132,128 @@ class Main {
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Спринт 6");
+
+        manager.deleteAllTasks();
+        manager.deleteAllSubTasks();
+        manager.deleteAllEpics();
+
+        System.out.println("");
+        System.out.println("Удалили все задачи:");
+        System.out.println("");
+        System.out.println("Эпики:");
+        System.out.println(manager.getAllEpics());
+        System.out.println("");
+        System.out.println("Задачи:");
+        System.out.println(manager.getAllTasks());
+        System.out.println("");
+        System.out.println("Подзадачи:");
+        System.out.println(manager.getAllSubTasks());
+        System.out.println("");
+
+        System.out.println("");
+        System.out.println("История после удаления всех задач:");
+
+        if (manager.getHistory().isEmpty()) {
+            System.out.println("История пуста.");
+        } else {
+            for (Task task : manager.getHistory()) {
+                System.out.println(task);
+            }
+        }
+
+        System.out.println("");
+        System.out.println("Создаем новые задачи:");
+
+        Task taskOneSp = manager.createTask(new Task("Купить билет", "Купить билет на поезд. На 12-ое "
+                + "августа."));
+        Task taskTwoSp = manager.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
+                + "приезде."));
+
+        Epic epicOneSp = manager.createEpic(new Epic("Прочитать книгу", "Прочитать книгу за два дня."));
+        SubTask subTaskOneOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать первые 10 глав",
+                "Прочитать за один день", epicOneSp.getTaskId()));
+        SubTask subTaskTwoOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать еще 5 глав",
+                "Прочитать за один день", epicOneSp.getTaskId()));
+        SubTask subTaskThreeOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать оставшиеся 4 главы",
+                "Прочитать за один день", epicOneSp.getTaskId()));
+
+        Epic epicTwoSp = manager.createEpic(new Epic("Приготовить ужин", "Ужин на четверых"));
+
+        System.out.println("");
+        System.out.println("Добавили новые задачи для 6 спринта:");
+        System.out.println("");
+        System.out.println("Эпики:");
+        System.out.println(manager.getAllEpics());
+        System.out.println("");
+        System.out.println("Задачи:");
+        System.out.println(manager.getAllTasks());
+        System.out.println("");
+        System.out.println("Подзадачи:");
+        System.out.println(manager.getAllSubTasks());
+        System.out.println("");
+
+        System.out.println("");
+        System.out.println("История:");
+
+        if (manager.getHistory().isEmpty()) {
+            System.out.println("История пуста.");
+        } else {
+            for (Task task : manager.getHistory()) {
+                System.out.println(task);
+            }
+        }
+
+        System.out.println("");
+        System.out.println("Просмотрели задачу: " + manager.getTask(taskOneSp.getTaskId()));
+        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskOneSp.getTaskId()));
+        System.out.println("Просмотрели задачу: " + manager.getTask(taskTwoSp.getTaskId()));
+        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskTwoSp.getTaskId()));
+
+
+        System.out.println("Просмотрели эпик: " + manager.getEpic(epicOneSp.getTaskId()));
+        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicOneSp.getTaskId()));
+        System.out.println("Просмотрели эпик: " + manager.getEpic(epicTwoSp.getTaskId()));
+        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicTwoSp.getTaskId()));
+
+
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskOneOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskOneOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskTwoOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskTwoOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskThreeOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskThreeOfEpicOneSp.getTaskId()));
+
+        System.out.println("");
+        System.out.println("История после просмотров:");
+
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
+
+        manager.deleteTask(taskOneSp.getTaskId());
+        System.out.println("");
+        System.out.println("Удалили задачу " + "'" + taskOneSp.getName() + "'. ");
+
+        System.out.println("");
+        System.out.println("История после удаления задачи :" + taskOneSp.getName());
+
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
+
+        manager.deleteEpic(epicOneSp.getTaskId());
+        System.out.println("");
+        System.out.println("Удалили эпик " + "'" + epicOneSp.getName() + "'. ");
+
+        System.out.println("");
+        System.out.println("История после удаления эпика :" + epicOneSp.getName());
+
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
     }
 } 
