@@ -51,7 +51,8 @@ class Main {
         System.out.println(manager.getTask(taskTwo.getTaskId()));
         System.out.println("");
 
-        SubTask subTaskOneOfEpicOneNew = new SubTask(subTaskOneOfEpicOne.getName(), subTaskOneOfEpicOne.getDescription(), subTaskOneOfEpicOne.getIdEpic());
+        SubTask subTaskOneOfEpicOneNew = new SubTask(subTaskOneOfEpicOne.getName(),
+                subTaskOneOfEpicOne.getDescription(), subTaskOneOfEpicOne.getIdEpic());
         subTaskOneOfEpicOneNew.setTaskId(subTaskOneOfEpicOne.getTaskId());
         subTaskOneOfEpicOneNew.setStatus(Status.DONE);
         manager.updateSubTask(subTaskOneOfEpicOneNew);
@@ -59,7 +60,8 @@ class Main {
         System.out.println(manager.getSubTask(subTaskOneOfEpicOne.getTaskId()));
         System.out.println("");
 
-        SubTask subTaskTwoOfEpicOneNew = new SubTask(subTaskTwoOfEpicOne.getName(), subTaskTwoOfEpicOne.getDescription(), subTaskTwoOfEpicOne.getIdEpic());
+        SubTask subTaskTwoOfEpicOneNew = new SubTask(subTaskTwoOfEpicOne.getName(),
+                subTaskTwoOfEpicOne.getDescription(), subTaskTwoOfEpicOne.getIdEpic());
         subTaskTwoOfEpicOneNew.setTaskId(subTaskTwoOfEpicOne.getTaskId());
         subTaskTwoOfEpicOneNew.setStatus(Status.IN_PROGRESS);
         manager.updateSubTask(subTaskTwoOfEpicOneNew);
@@ -67,7 +69,8 @@ class Main {
         System.out.println(manager.getSubTask(subTaskTwoOfEpicOne.getTaskId()));
         System.out.println("");
 
-        SubTask subTaskOneOfEpicTwoNew = new SubTask(subTaskOneOfEpicTwo.getName(), subTaskOneOfEpicTwo.getDescription(), subTaskOneOfEpicTwo.getIdEpic());
+        SubTask subTaskOneOfEpicTwoNew = new SubTask(subTaskOneOfEpicTwo.getName(),
+                subTaskOneOfEpicTwo.getDescription(), subTaskOneOfEpicTwo.getIdEpic());
         subTaskOneOfEpicTwoNew.setTaskId(subTaskOneOfEpicTwo.getTaskId());
         subTaskOneOfEpicTwoNew.setStatus(Status.DONE);
         manager.updateSubTask(subTaskOneOfEpicTwoNew);
@@ -168,20 +171,22 @@ class Main {
         System.out.println("");
         System.out.println("Создаем новые задачи:");
 
-        Task taskOneSp = manager.createTask(new Task("Купить билет", "Купить билет на поезд. На 12-ое "
+        Task taskOneSpSix = manager.createTask(new Task("Купить билет", "Купить билет на поезд. На"
+                + "12-ое "
                 + "августа."));
-        Task taskTwoSp = manager.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
+        Task taskTwoSpSix = manager.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
                 + "приезде."));
 
-        Epic epicOneSp = manager.createEpic(new Epic("Прочитать книгу", "Прочитать книгу за два дня."));
-        SubTask subTaskOneOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать первые 10 глав",
-                "Прочитать за один день", epicOneSp.getTaskId()));
-        SubTask subTaskTwoOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать еще 5 глав",
-                "Прочитать за один день", epicOneSp.getTaskId()));
-        SubTask subTaskThreeOfEpicOneSp = manager.createSubTask(new SubTask("Прочитать оставшиеся 4 главы",
-                "Прочитать за один день", epicOneSp.getTaskId()));
+        Epic epicOneSpSix = manager.createEpic(new Epic("Прочитать книгу", "Прочитать книгу за два"
+                + "дня."));
+        SubTask subTaskOneOfEpicOneSpSix = manager.createSubTask(new SubTask("Прочитать первые 10 глав",
+                "Прочитать за один день", epicOneSpSix.getTaskId()));
+        SubTask subTaskTwoOfEpicOneSpSix = manager.createSubTask(new SubTask("Прочитать еще 5 глав",
+                "Прочитать за один день", epicOneSpSix.getTaskId()));
+        SubTask subTaskThreeOfEpicOneSpSix = manager.createSubTask(new SubTask("Прочитать оставшиеся 4 главы",
+                "Прочитать за один день", epicOneSpSix.getTaskId()));
 
-        Epic epicTwoSp = manager.createEpic(new Epic("Приготовить ужин", "Ужин на четверых"));
+        Epic epicTwoSpSix = manager.createEpic(new Epic("Приготовить ужин", "Ужин на четверых"));
 
         System.out.println("");
         System.out.println("Добавили новые задачи для 6 спринта:");
@@ -208,49 +213,53 @@ class Main {
         }
 
         System.out.println("");
-        System.out.println("Просмотрели задачу: " + manager.getTask(taskOneSp.getTaskId()));
-        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskOneSp.getTaskId()));
-        System.out.println("Просмотрели задачу: " + manager.getTask(taskTwoSp.getTaskId()));
-        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskTwoSp.getTaskId()));
+        System.out.println("Просмотрели задачу: " + manager.getTask(taskOneSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskOneSpSix.getTaskId()));
+        System.out.println("Просмотрели задачу: " + manager.getTask(taskTwoSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно задачу: " + manager.getTask(taskTwoSpSix.getTaskId()));
 
+        System.out.println("Просмотрели эпик: " + manager.getEpic(epicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели эпик: " + manager.getEpic(epicTwoSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicTwoSpSix.getTaskId()));
 
-        System.out.println("Просмотрели эпик: " + manager.getEpic(epicOneSp.getTaskId()));
-        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicOneSp.getTaskId()));
-        System.out.println("Просмотрели эпик: " + manager.getEpic(epicTwoSp.getTaskId()));
-        System.out.println("Просмотрели повторно эпик: " + manager.getEpic(epicTwoSp.getTaskId()));
-
-
-        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskOneOfEpicOneSp.getTaskId()));
-        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskOneOfEpicOneSp.getTaskId()));
-        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskTwoOfEpicOneSp.getTaskId()));
-        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskTwoOfEpicOneSp.getTaskId()));
-        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskThreeOfEpicOneSp.getTaskId()));
-        System.out.println("Просмотрели повторно подзадачу: " + manager.getSubTask(subTaskThreeOfEpicOneSp.getTaskId()));
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskOneOfEpicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: "
+                + manager.getSubTask(subTaskOneOfEpicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskTwoOfEpicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: "
+                + manager.getSubTask(subTaskTwoOfEpicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели подзадачу: " + manager.getSubTask(subTaskThreeOfEpicOneSpSix.getTaskId()));
+        System.out.println("Просмотрели повторно подзадачу: "
+                + manager.getSubTask(subTaskThreeOfEpicOneSpSix.getTaskId()));
 
         System.out.println("");
         System.out.println("История после просмотров:");
+        System.out.println("");
 
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
 
-        manager.deleteTask(taskOneSp.getTaskId());
+        manager.deleteTask(taskOneSpSix.getTaskId());
         System.out.println("");
-        System.out.println("Удалили задачу " + "'" + taskOneSp.getName() + "'. ");
+        System.out.println("Удалили задачу " + "'" + taskOneSpSix.getName() + "'. ");
 
         System.out.println("");
-        System.out.println("История после удаления задачи :" + taskOneSp.getName());
+        System.out.println("История после удаления задачи '" + taskOneSpSix.getName() + "':");
+        System.out.println("");
 
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
 
-        manager.deleteEpic(epicOneSp.getTaskId());
+        manager.deleteEpic(epicOneSpSix.getTaskId());
         System.out.println("");
-        System.out.println("Удалили эпик " + "'" + epicOneSp.getName() + "'. ");
+        System.out.println("Удалили эпик " + "'" + epicOneSpSix.getName() + "'. ");
 
         System.out.println("");
-        System.out.println("История после удаления эпика :" + epicOneSp.getName());
+        System.out.println("История после удаления эпика '" + epicOneSpSix.getName() + "':");
+        System.out.println("");
 
         for (Task task : manager.getHistory()) {
             System.out.println(task);

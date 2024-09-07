@@ -5,6 +5,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +67,7 @@ class InMemoryTaskManagerTest {
         assertEquals(epic, epics.get(0), "Эпики не совпадают.");
 
         Epic epicTwo = new Epic("Test addNewEpicTwo", "Test addNewEpicTwo description");
-        epicTwo.setTaskId(5);
+        epicTwo.setTaskId(55);
         final int epicTwoId = epicTwo.getTaskId();
 
         manager.createEpic(epicTwo);
@@ -105,7 +106,7 @@ class InMemoryTaskManagerTest {
         assertEquals(subTask, subTasks.get(0), "Подзадачи не совпадают.");
 
         SubTask subTaskTwo = new SubTask("Test addNewSubTaskTwo", "Test addNewSubTaskTwo description", epic.getTaskId());
-        subTaskTwo.setTaskId(5);
+        subTaskTwo.setTaskId(88);
         final int subTaskTwoId = subTaskTwo.getTaskId();
 
         manager.createSubTask(subTaskTwo);
@@ -125,5 +126,70 @@ class InMemoryTaskManagerTest {
         final int idEpicOfFoundSubtask = foundSubTask.getIdEpic();
         Epic foundEpic = manager.getEpic(idEpicOfFoundSubtask);
         assertEquals(epic, foundEpic, "Эпики подзадачи не совпадают");
+    }
+
+    @Test
+    void AfterDeletingSubtasksTheEpicShouldNotHaveTheseSubtasks() {
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        manager.createEpic(epicOne);
+        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId());
+        manager.createSubTask(subTaskOne);
+        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId());
+        manager.createSubTask(subTaskTwo);
+
+        manager.deleteAllSubTasks();
+        Epic foundEpic = manager.getEpic(epicOne.getTaskId());
+
+        assertEquals(0, foundEpic.getIdSubTasks().size(), "У эпика хранятся удаленные подзадачи");
+    }
+
+    @Test
+    void DeletedSubtasksShouldNotStoreOldId() {
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        manager.createEpic(epicOne);
+        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId());
+        manager.createSubTask(subTaskOne);
+        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId());
+        manager.createSubTask(subTaskTwo);
+
+        int idSubTask = subTaskTwo.getTaskId();
+        manager.deleteSubTask(subTaskTwo.getTaskId());
+        ArrayList<SubTask> allSubTasks = manager.getAllSubTasks();
+        Boolean foundSubTask = allSubTasks.contains(idSubTask);
+
+        Assertions.assertFalse(foundSubTask, "Удаленная подзадача хранит id");
+    }
+
+    @Test
+    void taskInstanceSettersChangeAnyOfTheirFields() {
+        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        final int taskId = manager.createTask(task).getTaskId();
+        final Task savedTask = manager.getTask(taskId);
+        task.setTaskId(100);
+        int modifiedId = task.getTaskId();
+        assertNotEquals(modifiedId, taskId, "Id задачи не изменился");
+    }
+
+    @Test
+    void subTaskInstanceSettersChangeAnyOfTheirFields() {
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        manager.createEpic(epicOne);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epicOne.getTaskId());
+        final int subTaskId = manager.createSubTask(subTask).getTaskId();
+        final SubTask savedSubTask = manager.getSubTask(subTaskId);
+        savedSubTask.setTaskId(100);
+        int modifiedId = subTask.getTaskId();
+        assertNotEquals(modifiedId, subTaskId, "Id подзадачи не изменился");
+    }
+
+    @Test
+    void EpicInstanceSettersChangeAnyOfTheirFields() {
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        manager.createEpic(epic);
+        final int epicId = manager.createEpic(epic).getTaskId();
+        final Epic savedEpic = manager.getEpic(epicId);
+        savedEpic.setTaskId(100);
+        int modifiedId = savedEpic.getTaskId();
+        assertNotEquals(modifiedId, epicId, "Id эпика не изменился");
     }
 }
