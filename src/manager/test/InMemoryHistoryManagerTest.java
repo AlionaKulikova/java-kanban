@@ -1,33 +1,68 @@
 package manager.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.List;
 
 import manager.HistoryManager;
 import manager.InMemoryHistoryManager;
-import org.junit.jupiter.api.Test;
+import manager.Managers;
+import manager.TaskManager;
 import tasks.Task;
-
-import java.util.List;
 
 class InMemoryHistoryManagerTest {
 
     private final HistoryManager historyManager = new InMemoryHistoryManager();
-    Task task = new Task("Test addNewTask", "Test addNewTask description");
+    TaskManager manager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
+    Task taskOne = manager.createTask(new Task("Купить билет", "Купить билет на поезд. На 12-ое "
+            + "августа."));
+    Task taskTwo = manager.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
+            + "приезде."));
+
+    @BeforeEach
+    void beforeEach() {
+        historyManager.remove(taskOne.getTaskId());
+        historyManager.remove(taskTwo.getTaskId());
+    }
 
     @Test
     void shouldNotBeNull() {
-        historyManager.addTaskToHistory(task);
+        historyManager.addTaskToHistory(taskOne);
         final List<Task> history = historyManager.getHistory();
+
         assertNotNull(history, "История не пустая.");
         assertEquals(1, history.size(), "История не пустая.");
     }
 
     @Test
-    void tasksShouldBeEqual() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
-        historyManager.addTaskToHistory(task);
-        historyManager.addTaskToHistory(task);
+    void sameTaskShouldNotBeAddedAgain() {
+        historyManager.addTaskToHistory(taskOne);
+        historyManager.addTaskToHistory(taskOne);
+
         final List<Task> history = historyManager.getHistory();
-        assertEquals(history.get(0), history.get(1), "Задачи не равны.");
+
+        assertEquals(1, history.size(), "Добавилась повторно задача.");
+    }
+
+    @Test
+    void newTaskShouldBeAddedToHistory() {
+        historyManager.addTaskToHistory(taskOne);
+        historyManager.addTaskToHistory(taskTwo);
+
+        final List<Task> history = historyManager.getHistory();
+
+        assertEquals(2, history.size(), "Новая задача не добавилась.");
+    }
+
+    @Test
+    void taskShouldBeAddedAndRemovedFromHistory() {
+        historyManager.addTaskToHistory(taskOne);
+        historyManager.addTaskToHistory(taskTwo);
+        historyManager.remove(taskOne.getTaskId());
+
+        final List<Task> history = historyManager.getHistory();
+
+        assertEquals(1, history.size(), "Задача не удалилась.");
     }
 }
