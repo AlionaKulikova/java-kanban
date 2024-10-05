@@ -21,7 +21,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() {
+    private void save() {
         try {
             if (Files.exists(file.toPath())) {
                 Files.delete(file.toPath());
@@ -54,8 +54,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public void loadFromFile(File file) {
-        try (BufferedReader br= new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+    public static FileBackedTasksManager loadFromFile(File file, HistoryManager historyManager) {
+        FileBackedTasksManager manager = new FileBackedTasksManager(file, historyManager);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             String line;
             boolean isFirstLine = true;
 
@@ -72,14 +74,46 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
 
                 Task task = fromString(line);
-                System.out.println(task);
+
+                if (task instanceof Epic epic) {
+                    manager.addEpic(epic);
+                } else if (task instanceof SubTask subTask) {
+                    manager.addSubTask(subTask);
+                } else {
+                    manager.addTask(task);
+                }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось получить данные из файла.");
         }
+
+        return manager;
     }
 
-    private TypesTasks getTypeOfTask(Task task) {
+    private void addTask(Task task) {
+        int idTask=task.getTaskId();
+
+     Task resultTask = super.createTask(task);
+
+     resultTask.setTaskId(idTask);
+    }
+
+    private void addEpic(Epic epic) {
+        int idEpic=epic.getTaskId();
+
+        Epic resultEpic = super.createEpic(epic);
+        resultEpic.setTaskId(idEpic);
+    }
+
+    private void addSubTask(SubTask subTask) {
+        int idSubTask=subTask.getTaskId();
+
+        SubTask resultSubTask = super.createSubTask(subTask);
+
+        resultSubTask.setTaskId(idSubTask);
+    }
+
+    private static TypesTasks getTypeOfTask(Task task) {
         if (task instanceof Epic) {
 
             return TypesTasks.EPIC;
@@ -91,43 +125,43 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return TypesTasks.TASK;
     }
 
-    private String getEpicIdOfSubtask(Task task) {
+    private static String getEpicIdOfSubtask(Task task) {
         if (task instanceof SubTask) {
-            return Integer.toString(task.getTaskId());
+            return Integer.toString(((SubTask) task).getIdEpic());
         } else {
             return "";
         }
     }
 
-    private String toString(Task task) {
+    private static String toString(Task task) {
         String[] fieldsOfTask = {
                 Integer.toString(task.getTaskId()),
                 getTypeOfTask(task).toString(),
                 task.getName(),
                 task.getStatus().toString(),
                 task.getDescription(),
-                getEpicIdOfSubtask(task)
+                getEpicIdOfSubtask(task),
         };
 
         return String.join(",", fieldsOfTask);
     }
 
-    private Task fromString(String value) {
+    private static Task fromString(String value) {
         String[] fieldsOfTask = value.split(",");
 
-        if (fieldsOfTask[1].equals("EPIC")) {//если строка явл эпиком
+        if (fieldsOfTask[1].equals("EPIC")) {
             Epic epic = new Epic(fieldsOfTask[2], fieldsOfTask[4]);
             epic.setTaskId(Integer.parseInt(fieldsOfTask[0]));
             epic.setStatus(Status.valueOf(fieldsOfTask[3].toUpperCase()));
 
             return epic;
-        } else if (fieldsOfTask[1].equals("SUBTASK")) {////если строка явл подзадачей
+        } else if (fieldsOfTask[1].equals("SUBTASK")) {
             SubTask subTask = new SubTask(fieldsOfTask[2], fieldsOfTask[4], Integer.parseInt(fieldsOfTask[5]));
             subTask.setTaskId(Integer.parseInt(fieldsOfTask[0]));
 
             return subTask;
         } else {
-            Task task = new Task(fieldsOfTask[2], fieldsOfTask[4]);//если строка задача
+            Task task = new Task(fieldsOfTask[2], fieldsOfTask[4]);
             task.setTaskId(Integer.parseInt(fieldsOfTask[0]));
             task.setTaskId(Integer.parseInt(fieldsOfTask[0]));
 
