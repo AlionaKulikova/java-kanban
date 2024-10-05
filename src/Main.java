@@ -1,9 +1,13 @@
+import manager.FileBackedTasksManager;
 import manager.Managers;
 import manager.TaskManager;
 import status.Status;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
+
+import java.io.File;
+import java.nio.file.Path;
 
 class Main {
 
@@ -264,5 +268,46 @@ class Main {
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
+////////////////////////////////////////////7 sprint///////////////////////////////////////////////////////////////////
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Спринт 7");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Проверка менеджеров:");
+
+        Path path = Path.of("fileWriter.csv");
+        File file = new File(String.valueOf(path));
+
+        FileBackedTasksManager managerFileConstructor = new FileBackedTasksManager(file, Managers.getDefaultHistory());
+        Task taskOneConstructor = managerFileConstructor.createTask(new Task("Купить билет", "Купить билет на поезд. На"
+                + "12-ое "
+                + "августа."));
+        Task taskTwoConstructor = managerFileConstructor.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
+                + "приезде."));
+
+        Epic epicOneConstructor = managerFileConstructor.createEpic(new Epic("Прочитать книгу", "Прочитать книгу за два"
+                + "дня."));
+        SubTask subTaskOneOfEpicOneConstructor = managerFileConstructor.createSubTask(new SubTask("Прочитать первые 10 глав",
+                "Прочитать за один день", epicOneConstructor.getTaskId()));
+        SubTask subTaskTwoOfEpicOneConstructor = managerFileConstructor.createSubTask(new SubTask("Прочитать оставшиеся 9 глав",
+                "Прочитать за один день", epicOneConstructor.getTaskId()));
+
+        managerFileConstructor.deleteTask(taskOneConstructor.getTaskId());
+        managerFileConstructor.deleteSubTask(subTaskTwoOfEpicOneConstructor.getTaskId());
+
+        FileBackedTasksManager managerFile = FileBackedTasksManager.loadFromFile(file, Managers.getDefaultHistory());
+
+        System.out.println("");
+        System.out.println("Задачи из конструктора:");
+        System.out.println(managerFileConstructor.getAllTasks());
+        System.out.println(managerFileConstructor.getAllEpics());
+        System.out.println(managerFileConstructor.getAllSubTasks());
+        System.out.println("");
+
+        System.out.println("Задачи из файла:");
+        System.out.println(managerFile.getAllTasks());
+        System.out.println(managerFile.getAllEpics());
+        System.out.println(managerFile.getAllSubTasks());
     }
 } 
