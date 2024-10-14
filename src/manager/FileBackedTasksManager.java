@@ -3,6 +3,7 @@ package manager;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,6 +142,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 task.getStatus().toString(),
                 task.getDescription(),
                 getEpicIdOfSubtask(task),
+                task.getStartTime().toString(),
+                task.getEndTime().toString(),
+                Long.toString(task.getDuration()),
         };
 
         return String.join(",", fieldsOfTask);
@@ -148,20 +152,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static Task fromString(String value) {
         String[] fieldsOfTask = value.split(",");
+        Instant startTime = Instant.parse( fieldsOfTask[6]);
+        Instant endTime = Instant.parse( fieldsOfTask[7]);
+        long duration = Long.parseLong(fieldsOfTask[8]);
 
         if (fieldsOfTask[1].equals("EPIC")) {
-            Epic epic = new Epic(fieldsOfTask[2], fieldsOfTask[4]);
+            Epic epic = new Epic(fieldsOfTask[2], fieldsOfTask[4], startTime, duration);
             epic.setTaskId(Integer.parseInt(fieldsOfTask[0]));
             epic.setStatus(Status.valueOf(fieldsOfTask[3].toUpperCase()));
+            epic.setEndTime(endTime);
 
             return epic;
         } else if (fieldsOfTask[1].equals("SUBTASK")) {
-            SubTask subTask = new SubTask(fieldsOfTask[2], fieldsOfTask[4], Integer.parseInt(fieldsOfTask[5]));
+            SubTask subTask = new SubTask(fieldsOfTask[2], fieldsOfTask[4], Integer.parseInt(fieldsOfTask[5]), startTime, duration);
             subTask.setTaskId(Integer.parseInt(fieldsOfTask[0]));
 
             return subTask;
         } else {
-            Task task = new Task(fieldsOfTask[2], fieldsOfTask[4]);
+
+            Task task = new Task(fieldsOfTask[2], fieldsOfTask[4],  startTime, duration);
             task.setTaskId(Integer.parseInt(fieldsOfTask[0]));
             task.setTaskId(Integer.parseInt(fieldsOfTask[0]));
 

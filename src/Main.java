@@ -8,12 +8,14 @@ import tasks.Task;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 
 class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
-
+       TaskManager manager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
+/*
         Task taskOne = manager.createTask(new Task("Купить билет", "Купить билет на поезд. На 12-ое "
                 + "августа."));
         Task taskTwo = manager.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
@@ -267,9 +269,9 @@ class Main {
 
         for (Task task : manager.getHistory()) {
             System.out.println(task);
-        }
+        }*/
 ////////////////////////////////////////////7 sprint///////////////////////////////////////////////////////////////////
-        System.out.println("");
+       /* System.out.println("");
         System.out.println("");
         System.out.println("Спринт 7");
         System.out.println("");
@@ -309,5 +311,7 @@ class Main {
         System.out.println(managerFile.getAllTasks());
         System.out.println(managerFile.getAllEpics());
         System.out.println(managerFile.getAllSubTasks());
+    }*/
+
     }
-} 
+}

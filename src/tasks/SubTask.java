@@ -1,5 +1,6 @@
 package tasks;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class SubTask extends Task {
@@ -9,6 +10,12 @@ public class SubTask extends Task {
         super(name, description);
         this.idEpic = idEpic;
     }
+
+    public SubTask(String name, String description, int idEpic, Instant startTime, long duration) {
+        super(name, description, startTime, duration);
+        this.idEpic = idEpic;
+    }
+
 
     public int getIdEpic() {
         return idEpic;
@@ -36,6 +43,9 @@ public class SubTask extends Task {
                 ", name=" + getName() + '\'' +
                 ", description=" + getDescription() +
                 ", idEpic=" + getIdEpic() +
+                ", startTime=" + getStartTime().toEpochMilli() + '\'' +
+                ", endTime=" + getEndTime().toEpochMilli() + '\'' +
+                ", duration=" + getDuration() +
                 '}';
     }
 }
