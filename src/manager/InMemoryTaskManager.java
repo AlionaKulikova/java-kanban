@@ -292,7 +292,7 @@ public class InMemoryTaskManager implements TaskManager {
         validatePrioritizedTask();
     }
 
-    public boolean checkTimeIntersection(Task task) {
+    protected boolean checkTimeIntersection(Task task) {
         List<Task> tasks = List.copyOf(prioritizedTasks);
         int countNullTime = 0;
         if (!tasks.isEmpty()) {
