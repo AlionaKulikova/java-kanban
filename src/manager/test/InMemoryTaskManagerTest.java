@@ -1,5 +1,7 @@
 package manager.test;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void createTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         final int taskId = manager.createTask(task).getTaskId();
         final Task savedTask = manager.getTask(taskId);
 
@@ -40,7 +42,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
 
-        Task taskTwo = new Task("Test addNewTaskTwo", "Test addNewTaskTwo description");
+        Task taskTwo = new Task("Test addNewTaskTwo", "Test addNewTaskTwo description", Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         taskTwo.setTaskId(5);
         final int taskTwoId = taskTwo.getTaskId();
 
@@ -53,7 +55,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void createEpic() {
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         final int taskId = manager.createEpic(epic).getTaskId();
         final Epic savedEpic = manager.getEpic(taskId);
 
@@ -66,7 +68,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
         assertEquals(epic, epics.get(0), "Эпики не совпадают.");
 
-        Epic epicTwo = new Epic("Test addNewEpicTwo", "Test addNewEpicTwo description");
+        Epic epicTwo = new Epic("Test addNewEpicTwo", "Test addNewEpicTwo description", Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         epicTwo.setTaskId(55);
         final int epicTwoId = epicTwo.getTaskId();
 
@@ -79,9 +81,9 @@ class InMemoryTaskManagerTest {
 
     @Test
     void shouldEpicHaveSubtaskInItsArray() {
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId());
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTask);
         Epic foundEpic = manager.getEpic(epic.getTaskId());
         ArrayList<Integer> foundSubTasksOfEpic = foundEpic.getIdSubTasks();//получаем id подзадач эпика
@@ -91,8 +93,8 @@ class InMemoryTaskManagerTest {
 
     @Test
     void createSubTask() {
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId());
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         final int subTaskId = manager.createSubTask(subTask).getTaskId();
         final SubTask savedSubTask = manager.getSubTask(subTaskId);
 
@@ -105,7 +107,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, subTasks.size(), "Неверное количество подзадач.");
         assertEquals(subTask, subTasks.get(0), "Подзадачи не совпадают.");
 
-        SubTask subTaskTwo = new SubTask("Test addNewSubTaskTwo", "Test addNewSubTaskTwo description", epic.getTaskId());
+        SubTask subTaskTwo = new SubTask("Test addNewSubTaskTwo", "Test addNewSubTaskTwo description", epic.getTaskId(), Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         subTaskTwo.setTaskId(88);
         final int subTaskTwoId = subTaskTwo.getTaskId();
 
@@ -118,9 +120,9 @@ class InMemoryTaskManagerTest {
 
     @Test
     void shouldSubtaskHaveEpic() {
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId());
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epic.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTask);
         SubTask foundSubTask = manager.getSubTask(subTask.getTaskId());
         final int idEpicOfFoundSubtask = foundSubTask.getIdEpic();
@@ -130,11 +132,11 @@ class InMemoryTaskManagerTest {
 
     @Test
     void AfterDeletingSubtasksTheEpicShouldNotHaveTheseSubtasks() {
-        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epicOne);
-        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId());
+        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTaskOne);
-        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId());
+        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId(), Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTaskTwo);
 
         manager.deleteAllSubTasks();
@@ -145,11 +147,11 @@ class InMemoryTaskManagerTest {
 
     @Test
     void DeletedSubtasksShouldNotStoreOldId() {
-        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epicOne);
-        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId());
+        SubTask subTaskOne = new SubTask("Test addNewSubTaskOne", "Test addNewSubTask description", epicOne.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTaskOne);
-        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId());
+        SubTask subTaskTwo = new SubTask("Test addNewSubTask", "Test addNewSubTaskTwo description", epicOne.getTaskId(), Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createSubTask(subTaskTwo);
 
         int idSubTask = subTaskTwo.getTaskId();
@@ -162,7 +164,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void taskInstanceSettersChangeAnyOfTheirFields() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         final int taskId = manager.createTask(task).getTaskId();
         final Task savedTask = manager.getTask(taskId);
         task.setTaskId(100);
@@ -172,9 +174,9 @@ class InMemoryTaskManagerTest {
 
     @Test
     void subTaskInstanceSettersChangeAnyOfTheirFields() {
-        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description");
+        Epic epicOne = new Epic("Test addNewEpicOne", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epicOne);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epicOne.getTaskId());
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", epicOne.getTaskId(), Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         final int subTaskId = manager.createSubTask(subTask).getTaskId();
         final SubTask savedSubTask = manager.getSubTask(subTaskId);
         savedSubTask.setTaskId(100);
@@ -184,7 +186,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void EpicInstanceSettersChangeAnyOfTheirFields() {
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli());
         manager.createEpic(epic);
         final int epicId = manager.createEpic(epic).getTaskId();
         final Epic savedEpic = manager.getEpic(epicId);

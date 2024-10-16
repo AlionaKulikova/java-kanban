@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,9 +47,9 @@ class FileBackedTasksManagerTest {
     public void shouldCorrectlySaveDataToFileAndLoadDataFromFile() {
         Task taskOneConstructor = managerFileConstructor.createTask(new Task("Купить билет", "Купить билет на поезд. На"
                 + "12-ое "
-                + "августа."));
+                + "августа.", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli()  ));
         Task taskTwoConstructor = managerFileConstructor.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
-                + "приезде."));
+                + "приезде.", Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli()));
 
         managerFileConstructor.deleteTask(taskOneConstructor.getTaskId());
         managerFile = FileBackedTasksManager.loadFromFile(file, Managers.getDefaultHistory());
@@ -58,9 +61,9 @@ class FileBackedTasksManagerTest {
     public void shouldCorrectlySaveEmptyTasksToFileAndLoadEmptyTasksFromFile() {
         Task taskOneConstructor = managerFileConstructor.createTask(new Task("Купить билет", "Купить билет на поезд. На"
                 + "12-ое "
-                + "августа."));
+                + "августа.", Instant.now(), Instant.now().plus(Duration.ofHours(1)).toEpochMilli()));
         Task taskTwoConstructor = managerFileConstructor.createTask(new Task("Отправить письмо", "Сообщить друзьям о своём "
-                + "приезде."));
+                + "приезде.", Instant.now().plus(Duration.ofHours(5)), Instant.now().plus(Duration.ofHours(1)).toEpochMilli() ));
 
         managerFileConstructor.deleteAllTasks();
         managerFile = FileBackedTasksManager.loadFromFile(file, Managers.getDefaultHistory());
