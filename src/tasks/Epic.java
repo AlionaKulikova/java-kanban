@@ -1,13 +1,20 @@
 package tasks;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> idSubTasks = new ArrayList();
+    private Instant endTime;
 
     public Epic(String name, String description) {
         super(name, description);
+    }
+
+    public Epic(String name, String description, Instant startTime, long duration) {
+        super(name, description, startTime, duration);
+        this.endTime = super.getEndTime();
     }
 
     public ArrayList<Integer> getIdSubTasks() {
@@ -16,6 +23,15 @@ public class Epic extends Task {
 
     public void setIdSubTasks(int idSubTask) {
         this.idSubTasks.add(idSubTask);
+    }
+
+    @Override
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
     @Override
@@ -38,7 +54,11 @@ public class Epic extends Task {
                 "taskId='" + getTaskId() + '\'' +
                 ", status='" + getStatus() + '\'' +
                 ", name=" + getName() + '\'' +
-                ", description=" + getDescription() + '\'';
+                ", description=" + getDescription() + '\'' +
+                ", startTime=" + getStartTime().toEpochMilli() + '\'' +
+                ", endTime=" + getEndTime().toEpochMilli() + '\'' +
+                ", duration=" + getDuration() +
+                '}';
 
         if (idSubTasks != null) {
             result = result + ", idSubTasks.size=" + idSubTasks.size();
