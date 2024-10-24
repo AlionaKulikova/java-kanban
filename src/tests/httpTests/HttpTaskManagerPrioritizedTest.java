@@ -1,4 +1,4 @@
-package http.tests;
+package tests.httpTests;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,12 +6,9 @@ import http.InstantAdapter;
 import http.Server;
 import manager.Managers;
 import manager.TaskManager;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import tasks.Task;
 
 import java.io.IOException;
@@ -21,6 +18,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HttpTaskManagerPrioritizedTest {
     TaskManager taskManager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());

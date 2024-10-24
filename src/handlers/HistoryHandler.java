@@ -1,4 +1,4 @@
-package http.handlers;
+package handlers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,3 +47,4 @@ public class HistoryHandler implements HttpHandler {
         }
     }
 }
+

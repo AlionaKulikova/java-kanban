@@ -1,4 +1,4 @@
-package http.handlers;
+package handlers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import http.InstantAdapter;
 import manager.TaskManager;
-import tasks.Epic;
 import tasks.SubTask;
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class SubTasksHandler implements HttpHandler {
                         int id = Integer.parseInt(query);
                         System.out.println((id));
                         SubTask subTask = taskManager.getSubTask(id);
-                        if (subTask != null) {//если эпик не найден нужно возвращать null????
+                        if (subTask != null) {
                             response = gson.toJson(subTask);
                             statusCode = 200;
                         } else {
@@ -71,7 +70,6 @@ public class SubTasksHandler implements HttpHandler {
 
             case "POST":
                 String bodyRequest = new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-
                 try {
                     SubTask subTask = gson.fromJson(bodyRequest, SubTask.class);
                     int id = subTask.getTaskId();
@@ -104,7 +102,7 @@ public class SubTasksHandler implements HttpHandler {
                     query = splitStrings[2];
 
                     try {
-                       int id = Integer.parseInt(query);
+                        int id = Integer.parseInt(query);
                         taskManager.deleteSubTask(id);
                         statusCode = 200;
                         response = "Удалили задачу с id: " + id;

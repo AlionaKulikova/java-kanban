@@ -1,7 +1,7 @@
 package http;
 
 import com.sun.net.httpserver.HttpServer;
-import http.handlers.*;
+import handlers.*;
 import manager.TaskManager;
 
 import java.io.IOException;
@@ -28,5 +28,4 @@ public class Server {
     public void stop() {
         httpServer.stop(1);
     }
-
 }

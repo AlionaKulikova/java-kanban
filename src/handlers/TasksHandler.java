@@ -1,4 +1,4 @@
-package http.handlers;
+package handlers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,23 +7,21 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import http.InstantAdapter;
 import manager.TaskManager;
-import tasks.Epic;
-import tasks.SubTask;
+import tasks.Task;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
 
 
-public class EpicsHandler implements HttpHandler {
+public class TasksHandler implements HttpHandler {
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final TaskManager taskManager;
 
-    public EpicsHandler(TaskManager taskManager) {
+    public TasksHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -42,39 +40,14 @@ public class EpicsHandler implements HttpHandler {
                     query = splitStrings[2];
                     try {
                         int id = Integer.parseInt(query);
-                        System.out.println((id));
-                        Epic epic = taskManager.getEpic(id);
-                        if (epic != null) {
-                            response = gson.toJson(epic);
+                        Task task = taskManager.getTask(id);
+                        if (task != null) {
+                            response = gson.toJson(task);
                             statusCode = 200;
                         } else {
                             statusCode = 404;
                             response = "Задача с данным id не найдена";
                         }
-
-                    } catch (StringIndexOutOfBoundsException e) {
-                        statusCode = 400;
-                        response = "Нет параметра id";
-                    } catch (NumberFormatException e) {
-                        statusCode = 400;
-                        response = "Неверный формат id";
-                    }
-                } else if (splitStrings.length == 4) {
-                    query = splitStrings[2];
-                    try {
-                        int id = Integer.parseInt(query);
-                        System.out.println((id));
-                        Epic epic = taskManager.getEpic(id);
-
-                        if (epic != null) {
-                            ArrayList<SubTask> subTaskOfEpic = taskManager.getSubTasksOfEpic(epic);
-                            response = gson.toJson(subTaskOfEpic);
-                            statusCode = 200;
-                        } else {
-                            statusCode = 404;
-                            response = "Эпик не найден";
-                        }
-
                     } catch (StringIndexOutOfBoundsException e) {
                         statusCode = 400;
                         response = "Нет параметра id";
@@ -84,29 +57,31 @@ public class EpicsHandler implements HttpHandler {
                     }
                 } else {
                     statusCode = 200;
-                    if (taskManager.getAllEpics() != null) {
-                        String jsonString = gson.toJson(taskManager.getAllEpics());
-                        response = gson.toJson(jsonString);
-                    } else {
-                        response = "массив эпиков пуст";
-                    }
+                    String jsonString = gson.toJson(taskManager.getAllTasks());
+                    response = gson.toJson(jsonString);
                 }
                 break;
-
             case "POST":
                 String bodyRequest = new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-
                 try {
-                    Epic epic = gson.fromJson(bodyRequest, Epic.class);
-                    int id = epic.getTaskId();
+                    Task task = gson.fromJson(bodyRequest, Task.class);
+                    int id = task.getTaskId();
 
                     if (id != 0) {
-                        taskManager.updateEpic(epic);
+                        taskManager.updateTask(task);
                         statusCode = 201;
                         response = "Задача с id: " + id + " обновлена";
                     } else {
-                        Epic epicCreated = taskManager.createEpic(epic);
-                        int idCreated = epicCreated.getTaskId();
+                        Task taskCreated = taskManager.createTask(task);
+                        int idCreated = taskCreated.getTaskId();
+
+                        boolean isIntersection = taskManager.checkTimeIntersection(task);
+                        if (isIntersection) {
+                            statusCode = 406;
+                            response = "Задача пересекается во времени с существующими.";
+                            break;
+                        }
+
                         statusCode = 201;
                         response = "Создана задача с id: " + idCreated;
                     }
@@ -115,14 +90,13 @@ public class EpicsHandler implements HttpHandler {
                     response = "Неверный формат запроса";
                 }
                 break;
-
             case "DELETE":
                 if (splitStrings.length == 3) {
                     query = splitStrings[2];
 
                     try {
                         int id = Integer.parseInt(query);
-                        taskManager.deleteEpic(id);
+                        taskManager.deleteTask(id);
                         statusCode = 200;
                         response = "Удалили задачу с id: " + id;
                     } catch (StringIndexOutOfBoundsException e) {
@@ -133,7 +107,7 @@ public class EpicsHandler implements HttpHandler {
                         response = "Неверный формат id";
                     }
                 } else {
-                    taskManager.deleteAllEpics();
+                    taskManager.deleteAllTasks();
                     statusCode = 200;
                     response = "Удалили все задачи";
                 }
@@ -150,4 +124,3 @@ public class EpicsHandler implements HttpHandler {
         }
     }
 }
-

@@ -1,9 +1,9 @@
-package tasks.test;
+package tests.tasks;
+
+import org.junit.jupiter.api.Test;
+import tasks.Task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-
-import tasks.Task;
 
 class TaskTest {
     int taskId = 1;
