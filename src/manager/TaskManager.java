@@ -47,4 +47,8 @@ public interface TaskManager {
     ArrayList<SubTask> getSubTasksOfEpic(Epic epic);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+    boolean checkTimeIntersection(Task task);
 }
