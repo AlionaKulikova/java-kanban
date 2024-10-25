@@ -1,6 +1,7 @@
-package manager.test;
+package tests.managerTests;
 
-import manager.*;
+import manager.FileBackedTasksManager;
+import manager.Managers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 

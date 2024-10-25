@@ -1,11 +1,10 @@
-package tasks.test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package tests.tasks;
 
 import org.junit.jupiter.api.Test;
-
 import tasks.Epic;
 import tasks.SubTask;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SubTaskTest {
     int subTaskId = 1;
