@@ -63,5 +63,5 @@ Task Tracker — это система управления задачами, в
 Клонируйте репозиторий:
 
 ```bash
-git clone [<repository-url>](https://github.com/AlionaKulikova/java-kanban.git)
+git clone https://github.com/AlionaKulikova/java-kanban.git
 cd task-tracker
